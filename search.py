@@ -1,5 +1,5 @@
 from curl_cffi import requests
-import random, time,json,string
+import random, time,json,string,logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import urlparse
 user_name = input("enter user name:")
@@ -26,6 +26,12 @@ headers = {
     "Sec-Fetch-Site": "none", 
     "Sec-Fetch-User": "?1",
 }
+
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 def search(name, url):
         try:
@@ -58,14 +64,14 @@ def search(name, url):
             else:
                 return f"found!! {name}: {url}{user_name}"
         except:
-            print("未知錯誤")
+            logger.error("未知錯誤")
 with open("data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
         with ThreadPoolExecutor(max_workers=10) as executor:
             future_name = {executor.submit(search, name, url): name for name, url in data.items()}
             for future in as_completed(future_name):
                 o_name = future_name.get(future)
-                print(future.result())
+                logger.info(future.result())
 
 
 
