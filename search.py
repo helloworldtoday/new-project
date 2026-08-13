@@ -43,8 +43,18 @@ def search(name, url):
             tolerance = max(100, base.get("length") * 0.1)
             if res.status_code == 404 or tolerance >= different:
                 return f"{name}: page not found"
+            elif res.status_code == 301:
+                 return f"{name}: Moved Permanently"
             elif res.status_code == 429:
                 return f"{name}: too many request"
+            elif res.status_code == 304:
+                return f"{name}: Not Modified"
+            elif res.status_code == 400:
+                return f"{name}: Bad Request"
+            elif res.status_code == 403:
+                return f"{name}: Forbidden"
+            elif res.status_code == 401:
+                return f"{name}: Unauthorized"
             else:
                 return f"found!! {name}: {url}{user_name}"
         except:
