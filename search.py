@@ -3,6 +3,7 @@ import random, time,json,string,logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import urlparse
 user_name = input("enter user name:")
+use_tor = input("use tor [y/n]:").lower
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0",
@@ -27,6 +28,11 @@ headers = {
     "Sec-Fetch-User": "?1",
 }
 
+tor_proxies = {
+    'http': 'socks5h://127.0.0.1:9050',
+    'https': 'socks5h://127.0.0.1:9050'
+}
+
 logging.basicConfig(
     level=logging.DEBUG,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -34,16 +40,18 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def search(name, url):
+        use_tor = True if use_tor == "y" else False
+        proxies = tor_proxies if use_tor else None
         try:
             random_url = f"{urlparse(url).scheme}://{urlparse(url).netloc}/{''.join(random.choices(string.ascii_letters + string.digits, k=12))}"
-            res = requests.get(random_url, headers=headers, timeout=10)
+            res = requests.get(random_url,proxies=proxies, headers=headers, timeout=10)
             base = {
                 "code": res.status_code,
                 "length": len(res.text),
                 "url": random_url
             }
 
-            res = requests.get(url.rstrip("/") + "/" + user_name, impersonate="chrome120", headers=headers, timeout=5)
+            res = requests.get(url.rstrip("/") + "/" + user_name, impersonate="chrome120", headers=headers, timeout=5, proxies=proxies)
             time.sleep(random.uniform(1.5,5.5))
             different = abs(base.get("length") - len(res.text))
             tolerance = max(100, base.get("length") * 0.1)
