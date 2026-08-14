@@ -2,8 +2,9 @@ from curl_cffi import requests
 import random, time,json,string,logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import urlparse
+from random_url import make_rand_url
 user_name = input("enter user name:")
-use_tor = input("use tor [y/n]:").lower
+use_tor = input("use tor [y/n]:").lower()
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0",
@@ -43,7 +44,7 @@ def search(name, url):
         use_tor = True if use_tor == "y" else False
         proxies = tor_proxies if use_tor else None
         try:
-            random_url = f"{urlparse(url).scheme}://{urlparse(url).netloc}/{''.join(random.choices(string.ascii_letters + string.digits, k=12))}"
+            random_url = make_rand_url(url)
             res = requests.get(random_url,proxies=proxies, headers=headers, timeout=10)
             base = {
                 "code": res.status_code,
@@ -57,28 +58,19 @@ def search(name, url):
             tolerance = max(100, base.get("length") * 0.1)
             if res.status_code == 404 or tolerance >= different:
                 return f"{name}: page not found"
-            elif res.status_code == 301:
-                 return f"{name}: Moved Permanently"
-            elif res.status_code == 429:
-                return f"{name}: too many request"
-            elif res.status_code == 304:
-                return f"{name}: Not Modified"
-            elif res.status_code == 400:
-                return f"{name}: Bad Request"
-            elif res.status_code == 403:
-                return f"{name}: Forbidden"
-            elif res.status_code == 401:
-                return f"{name}: Unauthorized"
-            else:
-                return f"found!! {name}: {url}{user_name}"
-        except:
-            logger.error("未知錯誤")
+            with open("status.json", "r", encoding="utf-8") as f:
+                status = json.load(f)
+                for code, text in status:
+                    if code == res.status_code:
+                        return f"{name}: {text}"
+        except Exception:
+            logger.error(f"error: {Exception}")
 with open("data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
         with ThreadPoolExecutor(max_workers=10) as executor:
-            future_name = {executor.submit(search, name, url): name for name, url in data.items()}
-            for future in as_completed(future_name):
-                o_name = future_name.get(future)
+            future_to_name = {executor.submit(search, name, url): name for name, url in data.items()}
+            for future in as_completed(future_to_name):
+                o_name = future_to_name.get(future)
                 logger.info(future.result())
 
 

@@ -1,0 +1,8 @@
+{
+    "301": "Moved Permanently",
+    "429": "too many request",
+    "304": "Not Modified",
+    "400": "Bad Request",
+    "403": "Forbidden",
+    "401": "Unauthorized"
+}
