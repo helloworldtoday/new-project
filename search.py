@@ -64,8 +64,9 @@ def search(name, url):
                 for code, text in status.items():
                     if code == res.status_code:
                         return f"{name}: {text}"
+                return f"Found !!{name}: {url}"
         except Exception as e:
-            logger.error(f"error: {e}")
+            logger.error(f"{name} error: {e}")
 with open("data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
         with ThreadPoolExecutor(max_workers=10) as executor:
