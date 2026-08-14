@@ -4,7 +4,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from urllib.parse import urlparse
 from random_url import make_rand_url
 user_name = input("enter user name:")
-use_tor = input("use tor [y/n]:").lower()
+use_tor = input("use tor [y/n]:")
 USER_AGENTS = [
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0",
@@ -41,7 +41,8 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def search(name, url):
-        use_tor = True if use_tor == "y" else False
+        global use_tor
+        use_tor = str(use_tor).strip().lower() == "y"
         proxies = tor_proxies if use_tor else None
         try:
             random_url = make_rand_url(url)
