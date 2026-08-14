@@ -5,6 +5,7 @@ def make_rand_url(url):
     parsed_url = urlparse(url)
     ramdom_letters = ''.join(random.choices(string.ascii_letters + string.digits, k=12))
     random_url = f"{parsed_url.scheme}://{parsed_url.netloc}/{ramdom_letters}"
+    return random_url
 
 if __name__ == 'main':
     make_rand_url()

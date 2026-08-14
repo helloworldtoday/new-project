@@ -61,11 +61,11 @@ def search(name, url):
                 return f"{name}: page not found"
             with open("status.json", "r", encoding="utf-8") as f:
                 status = json.load(f)
-                for code, text in status:
+                for code, text in status.items():
                     if code == res.status_code:
                         return f"{name}: {text}"
-        except Exception:
-            logger.error(f"error: {Exception}")
+        except Exception as e:
+            logger.error(f"error: {e}")
 with open("data.json", "r", encoding="utf-8") as f:
         data = json.load(f)
         with ThreadPoolExecutor(max_workers=10) as executor:
