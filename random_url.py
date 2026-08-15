@@ -7,5 +7,3 @@ def make_rand_url(url):
     random_url = f"{parsed_url.scheme}://{parsed_url.netloc}/{ramdom_letters}"
     return random_url
 
-if __name__ == 'main':
-    make_rand_url()

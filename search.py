@@ -1,38 +1,10 @@
 from curl_cffi import requests
-import random, time,json,string,logging
+import random, time,json,logging
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from urllib.parse import urlparse
 from random_url import make_rand_url
+from config import headers, tor_proxies, status_massage, data
 user_name = input("enter user name:")
 use_tor = input("use tor [y/n]:")
-USER_AGENTS = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36 Edg/121.0.0.0",
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:122.0) Gecko/20100101 Firefox/122.0",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
-    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15"
-]
-
-headers = {
-    "User-Agent": random.choice(USER_AGENTS),
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-    "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Connection": "keep-alive",
-    "Upgrade-Insecure-Requests": "1",
-    "sec-ch-ua": '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
-    "sec-ch-ua-mobile": "?0",
-    "sec-ch-ua-platform": '"Windows"',
-    "Sec-Fetch-Dest": "document",
-    "Sec-Fetch-Mode": "navigate",
-    "Sec-Fetch-Site": "none", 
-    "Sec-Fetch-User": "?1",
-}
-
-tor_proxies = {
-    'http': 'socks5h://127.0.0.1:9050',
-    'https': 'socks5h://127.0.0.1:9050'
-}
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -59,21 +31,20 @@ def search(name, url):
             tolerance = max(100, base.get("length") * 0.1)
             if res.status_code == 404 or tolerance >= different:
                 return f"{name}: page not found"
-            with open("status.json", "r", encoding="utf-8") as f:
-                status = json.load(f)
-                for code, text in status.items():
-                    if code == res.status_code:
-                        return f"{name}: {text}"
+            for code, text in status_massage.items():
+                if int(code) == res.status_code:
+                    return f"{name}: {text}"
+            if res.status_code == 200:
                 return f"Found !!{name}: {url}"
         except Exception as e:
             logger.error(f"{name} error: {e}")
-with open("data.json", "r", encoding="utf-8") as f:
-        data = json.load(f)
+def run():
         with ThreadPoolExecutor(max_workers=10) as executor:
             future_to_name = {executor.submit(search, name, url): name for name, url in data.items()}
             for future in as_completed(future_to_name):
-                o_name = future_to_name.get(future)
                 logger.info(future.result())
+if __name__ == '__main__':
+    run()
 
 
 
