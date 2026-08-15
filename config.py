@@ -7,8 +7,7 @@ USER_AGENTS = [
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
     "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.2 Safari/605.1.15"
 ]
-headers = {
-    "User-Agent": random.choice(USER_AGENTS),
+base_headers = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
     "Accept-Language": "zh-TW,zh;q=0.9,en-US;q=0.8,en;q=0.7",
     "Accept-Encoding": "gzip, deflate, br",
@@ -39,17 +38,17 @@ status_massage = {
 
 data = {
     "Facebook": "https://facebook.com/",
-  "Instagram": "https://instagram.com/",
-  "Threads": "https://www.threads.net/@",
-  "LINE 官方帳號": "https://page.line.me/",
-  "X": "https://x.com/",
-  "TikTok": "https://tiktok.com/@",
-  "LinkedIn": "https://www.linkedin.com/in/",
-  "巴哈姆特": "https://home.gamer.com.tw/homeindex.php?owner=",
-  "Dcard": "https://dcard.tw/@",
-  "YouTube": "https://youtube.com/@",
-  "蝦皮購物": "https://shopee.tw/",
-  "露天市集": "https://www.ruten.com.tw/store/",
-  "旋轉拍賣": "https://tw.carousell.com/u/",
-  "Pinkoi": "https://www.pinkoi.com/store/"
+    "Instagram": "https://instagram.com/",
+    "Threads": "https://www.threads.net/@",
+    "LINE 官方帳號": "https://page.line.me/",
+    "X": "https://x.com/",
+    "TikTok": "https://tiktok.com/@",
+    "LinkedIn": "https://www.linkedin.com/in/",
+    "巴哈姆特": "https://home.gamer.com.tw/homeindex.php?owner=",
+    "Dcard": "https://dcard.tw/@",
+    "YouTube": "https://youtube.com/@",
+    "蝦皮購物": "https://shopee.tw/",
+    "露天市集": "https://www.ruten.com.tw/store/",
+    "旋轉拍賣": "https://tw.carousell.com/u/",
+    "Pinkoi": "https://www.pinkoi.com/store/"
 }
