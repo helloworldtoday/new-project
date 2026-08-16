@@ -3,8 +3,6 @@ import random, time,logging,threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from random_url import make_rand_url
 from config import base_headers, tor_proxies, status_massage, data, USER_AGENTS
-user_name = input("enter user name:")
-use_tor = input("use tor [y/n]:").strip().lower() == "y"
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -24,7 +22,7 @@ def combine_headers():
     headers["User-Agent"] = random.choice(USER_AGENTS)
     return headers
      
-def search(name, url, use_tor):
+def search(name, url,user_name, use_tor):
         proxies = tor_proxies if use_tor else None
         try:
             session = get_session()
@@ -51,13 +49,12 @@ def search(name, url, use_tor):
             return f"{name} error: {res.status_code}"
         except Exception as e:
             logger.error(f"{name} error: {e}")
-def run():
-        with ThreadPoolExecutor(max_workers=10) as executor:
-            future_to_name = {executor.submit(search, name, url, use_tor): name for name, url in data.items()}
+def run(user_name, use_tor, Max_workers=5):
+        with ThreadPoolExecutor(max_workers=Max_workers) as executor:
+            future_to_name = {executor.submit(search, name, url, user_name, use_tor): name for name, url in data.items()}
             for future in as_completed(future_to_name):
                 logger.info(future.result())
-if __name__ == '__main__':
-    run()
+
 
 
 

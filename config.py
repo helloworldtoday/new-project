@@ -44,7 +44,7 @@ data = {
     "X": "https://x.com/",
     "TikTok": "https://tiktok.com/@",
     "LinkedIn": "https://www.linkedin.com/in/",
-    "巴哈姆特": "https://home.gamer.com.tw/homeindex.php?owner=",
+    "巴哈姆特": "https://home.gamer.com.tw/",
     "Dcard": "https://dcard.tw/@",
     "YouTube": "https://youtube.com/@",
     "蝦皮購物": "https://shopee.tw/",
