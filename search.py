@@ -3,6 +3,7 @@ import random, time,logging,threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from random_url import make_rand_url
 from config import base_headers, tor_proxies, status_massage, data, USER_AGENTS
+from check import check_keywords
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -39,7 +40,8 @@ def search(name, url,user_name, use_tor):
             time.sleep(random.uniform(1.5,5.5))
             different = abs(base.get("length") - len(res.text))
             tolerance = max(100, base.get("length") * 0.1)
-            if res.status_code == 404 or tolerance >= different:
+            have_keyword = check_keywords(html=res.text)
+            if res.status_code == 404 or tolerance >= different or have_keyword == False:
                 return f"{name}: page not found"
             for code, text in status_massage.items():
                 if code == res.status_code:

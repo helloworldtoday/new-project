@@ -52,3 +52,10 @@ data = {
     "旋轉拍賣": "https://tw.carousell.com/u/",
     "Pinkoi": "https://www.pinkoi.com/store/"
 }
+
+keywords = [
+    "page not found",
+    "404 not found",
+    "error",
+    "頁面不存在"
+]
