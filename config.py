@@ -37,20 +37,20 @@ status_massage = {
 }
 
 data = {
-    "Facebook": "https://facebook.com/",
-    "Instagram": "https://instagram.com/",
-    "Threads": "https://www.threads.net/@",
-    "LINE 官方帳號": "https://page.line.me/",
-    "X": "https://x.com/",
-    "TikTok": "https://tiktok.com/@",
-    "LinkedIn": "https://www.linkedin.com/in/",
-    "巴哈姆特": "https://home.gamer.com.tw/",
-    "Dcard": "https://dcard.tw/@",
-    "YouTube": "https://youtube.com/@",
-    "蝦皮購物": "https://shopee.tw/",
-    "露天市集": "https://www.ruten.com.tw/store/",
-    "旋轉拍賣": "https://tw.carousell.com/u/",
-    "Pinkoi": "https://www.pinkoi.com/store/"
+    "Facebook": "https://facebook.com/{username}",
+    "Instagram": "https://instagram.com/{username}",
+    "Threads": "https://www.threads.net/@{username}",
+    "LINE 官方帳號": "https://page.line.me/{username}",
+    "X": "https://x.com/{username}",
+    "TikTok": "https://tiktok.com/@{username}",
+    "LinkedIn": "https://www.linkedin.com/in/{username}",
+    "巴哈姆特": "https://home.gamer.com.tw/homeindex.php?owner={username}",
+    "Dcard": "https://dcard.tw/@{username}",
+    "YouTube": "https://youtube.com/@{username}",
+    "蝦皮購物": "https://shopee.tw/{username}",
+    "露天市集": "https://www.ruten.com.tw/store/{username}",
+    "旋轉拍賣": "https://tw.carousell.com/u/{username}",
+    "Pinkoi": "https://www.pinkoi.com/store/{username}",
 }
 
 keywords = [

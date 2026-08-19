@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from random_url import make_rand_url
 from config import base_headers, tor_proxies, status_massage, data, USER_AGENTS
 from check import check_keywords
+from summ import summary
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -30,25 +31,21 @@ def search(name, url,user_name, use_tor):
             headers = combine_headers()
             random_url = make_rand_url(url)
             res = session.get(random_url,proxies=proxies,impersonate="chrome120", headers=headers, timeout=10)
-            base = {
-                "code": res.status_code,
-                "length": len(res.text),
-                "url": random_url
-            }
+            base_length = len(res.text)
 
-            res = session.get(url.rstrip("/") + "/" + user_name, impersonate="chrome120", headers=headers, timeout=10, proxies=proxies)
+            target = url.replace("{username}", user_name)
+            res = session.get(target, impersonate="chrome120", headers=headers, timeout=10, proxies=proxies)
             time.sleep(random.uniform(1.5,5.5))
-            different = abs(base.get("length") - len(res.text))
-            tolerance = max(100, base.get("length") * 0.1)
             have_keyword = check_keywords(html=res.text)
-            if res.status_code == 404 or tolerance >= different or have_keyword == False:
-                return f"{name}: page not found"
-            for code, text in status_massage.items():
-                if code == res.status_code:
-                    return f"{name}: {text}"
-            if res.status_code == 200:
-                return f"Found !!{name}: {url}{user_name}"
-            return f"{name} error: {res.status_code}"
+
+            signals = {
+                "status_code": res.status_code,
+                "base_length": base_length,
+                "keyword_hit": have_keyword,
+                "res_length": len(res.text)
+            }
+            reasons = summary(signals=signals)
+            return {"name": name, "url": target, "reasons": reasons}
         except Exception as e:
             logger.error(f"{name} error: {e}")
 def run(user_name, use_tor, Max_workers=5):
@@ -56,9 +53,3 @@ def run(user_name, use_tor, Max_workers=5):
             future_to_name = {executor.submit(search, name, url, user_name, use_tor): name for name, url in data.items()}
             for future in as_completed(future_to_name):
                 logger.info(future.result())
-
-
-
-
-            
-
